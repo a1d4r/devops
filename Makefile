@@ -26,6 +26,11 @@ install:
 pre-commit-install:
 	poetry run pre-commit install
 
+#* Run web application (dev server)
+.PHONY: up
+up:
+	poetry run uvicorn app_python.main:app --reload
+
 #* Formatters
 .PHONY: codestyle
 codestyle:
