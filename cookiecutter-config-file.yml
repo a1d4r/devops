@@ -1,0 +1,13 @@
+# This file contains values from Cookiecutter
+
+default_context:
+  project_name: "app_python"
+  project_description: "Simple python web application that shows current time in Moscow"
+  organization: "app_python"
+  license: "MIT"
+  minimal_python_version: 3.9
+  github_name: "a1d4r"
+  email: "a1d4r@yandex.ru"
+  version: "0.1.0"
+  line_length: "88"
+  create_example_template: "none"
