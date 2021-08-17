@@ -3,7 +3,7 @@ SHELL := /usr/bin/env bash
 PYTHON := python
 
 #* Docker variables
-IMAGE := app_python
+IMAGE := a1d4r/devops-python-app
 VERSION := latest
 
 #* Poetry
@@ -73,7 +73,7 @@ docker-build:
 	@echo Building docker $(IMAGE):$(VERSION) ...
 	docker build \
 		-t $(IMAGE):$(VERSION) . \
-		-f ./docker/Dockerfile --no-cache
+		-f ./docker/Dockerfile
 
 # Example: make clean_docker VERSION=latest
 # Example: make clean_docker IMAGE=some_name VERSION=0.1.0

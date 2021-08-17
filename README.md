@@ -31,10 +31,23 @@ poetry add devops
 ```
 
 ### Run
-```bash
+```shell
 make up
 ```
+or using Docker:
+```shell
+ docker run --rm -p 8000:8000 a1d4r/devops-python-app:latest
+```
 
+### Docker
+Build
+```shell
+make docker-build
+```
+Remove
+```shell
+make docker-remove
+```
 
 
 ### Makefile usage
