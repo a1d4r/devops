@@ -1,4 +1,6 @@
-# DevOps 
+# DevOps Labs
+
+## Python app
 
 <div align="center">
 
@@ -19,6 +21,10 @@ Simple python web application that shows current time in Moscow
 </div>
 
 ## Installation
+
+```bash
+cd app_python
+```
 
 ```bash
 pip install -U devops
