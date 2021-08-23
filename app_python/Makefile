@@ -29,7 +29,7 @@ pre-commit-install:
 #* Run web application (dev server)
 .PHONY: up
 up:
-	poetry run uvicorn app_python.main:app --reload
+	poetry run uvicorn app.main:app --reload
 
 #* Formatters
 .PHONY: codestyle
@@ -44,7 +44,7 @@ formatting: codestyle
 #* Linting
 .PHONY: test
 test:
-	poetry run pytest
+	poetry run python -m pytest
 
 .PHONY: check-codestyle
 check-codestyle:

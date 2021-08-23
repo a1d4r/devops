@@ -4,7 +4,7 @@ from zoneinfo import ZoneInfo
 from fastapi.testclient import TestClient
 from freezegun import freeze_time
 
-from app_python.main import app
+from app.main import app
 
 client = TestClient(app)
 

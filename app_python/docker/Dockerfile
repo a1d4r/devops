@@ -1,4 +1,5 @@
 FROM python:3.9-slim-buster
+LABEL maintainer="Aidar Garikhanov <a1d4r@yandex.ru>"
 
 ENV LANG=C.UTF-8 \
   LC_ALL=C.UTF-8 \
@@ -17,6 +18,9 @@ ENV PYTHONUNBUFFERED=on
 # set workdir as PYTHONPATH
 ENV PYTHONPATH=/app
 
+# Enable pipefail
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
 # Update packages
 RUN apt-get update && \
   apt-get install -y --no-install-recommends \
@@ -24,15 +28,19 @@ RUN apt-get update && \
   && rm -rf /var/lib/apt/lists/*
 
 # Install Poetry
-SHELL ["/bin/bash", "-o", "pipefail", "-c"]
-
 RUN curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | POETRY_HOME=/opt/poetry python && \
     cd /usr/local/bin && \
     ln -s /opt/poetry/bin/poetry && \
     poetry config virtualenvs.create false
 
-# Copy poetry configuration
+# Set working directory
 WORKDIR /app
+
+# Create user and set ownership
+RUN adduser --disabled-password --gecos '' myuser && chown -R myuser /app
+USER myuser
+
+# Copy poetry configuration
 COPY pyproject.toml pyproject.toml
 
 # Allow installing dev dependencies to run tests
@@ -40,9 +48,8 @@ ARG INSTALL_DEV=false
 # Install poetry
 RUN bash -c "if [ $INSTALL_DEV == 'true' ] ; then poetry install --no-root ; else poetry install --no-root --no-dev ; fi"
 
-COPY app_python app_python
-COPY Makefile Makefile
+COPY app/ app/
 
 EXPOSE 8000
 
-CMD ["poetry", "run", "uvicorn", "app_python.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["poetry", "run", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
