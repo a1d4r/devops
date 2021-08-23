@@ -9,7 +9,7 @@ from app.main import app
 client = TestClient(app)
 
 
-@freeze_time('2012-01-14 10:21:34')
+@freeze_time
 def test_current_time():
     response = client.get('/')
     assert response.status_code == 200
