@@ -50,17 +50,17 @@ test:
 check-codestyle:
 	poetry run isort --diff --check-only --settings-path pyproject.toml ./
 	poetry run black --diff --check --config pyproject.toml ./
-	poetry run darglint --verbosity 2 app_python tests
+	poetry run darglint --verbosity 2 app tests
 
 .PHONY: mypy
 mypy:
-	poetry run mypy --config-file pyproject.toml ./
+	poetry run mypy --config-file pyproject.toml -p app
 
 .PHONY: check-safety
 check-safety:
 	poetry check
 	poetry run safety check --full-report
-	poetry run bandit -ll --recursive app_python tests
+	poetry run bandit -ll --recursive app tests
 
 .PHONY: lint
 lint: test check-codestyle mypy check-safety

@@ -22,18 +22,18 @@ Simple python web application that shows current time in Moscow
 
 ## Installation
 
+Go to the app directory
 ```bash
 cd app_python
 ```
 
-```bash
-pip install -U devops
-```
-
-or install with `Poetry`
-
+Install dependencies with `Poetry`:
 ```bash
 poetry add devops
+```
+or using `pip`:
+```bash
+pip install -U devops
 ```
 
 ### Run
@@ -43,6 +43,11 @@ make up
 or using Docker:
 ```shell
  docker run --rm -p 8000:8000 a1d4r/devops-python-app:latest
+```
+
+### Unit tests
+```
+make test
 ```
 
 ### Docker
