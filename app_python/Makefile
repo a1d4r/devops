@@ -6,6 +6,9 @@ PYTHON := python
 IMAGE := a1d4r/devops-python-app
 VERSION := latest
 
+CODE = app tests
+TESTS = tests
+
 #* Poetry
 .PHONY: poetry-download
 poetry-download:
@@ -20,7 +23,7 @@ poetry-remove:
 install:
 	poetry lock -n && poetry export --without-hashes > requirements.txt
 	poetry install -n
-	-poetry run mypy --install-types --non-interactive ./
+	poetry run mypy --install-types --non-interactive -p $(CODE)
 
 .PHONY: pre-commit-install
 pre-commit-install:
@@ -35,8 +38,8 @@ up:
 .PHONY: codestyle
 codestyle:
 	poetry run pyupgrade --exit-zero-even-if-changed --py39-plus **/*.py
-	poetry run isort --settings-path pyproject.toml ./
-	poetry run black --config pyproject.toml ./
+	poetry run isort --settings-path pyproject.toml $(CODE)
+	poetry run black --config pyproject.toml $(CODE)
 
 .PHONY: formatting
 formatting: codestyle
@@ -44,26 +47,27 @@ formatting: codestyle
 #* Linting
 .PHONY: test
 test:
-	poetry run python -m pytest --cov=app tests/
+	poetry run python -m pytest --cov=app $(TESTS)
 
 .PHONY: check-codestyle
 check-codestyle:
-	poetry run isort --diff --check-only --settings-path pyproject.toml ./
-	poetry run black --diff --check --config pyproject.toml ./
-	poetry run darglint --verbosity 2 app tests
+	poetry run isort --diff --check-only --settings-path pyproject.toml $(CODE)
+	poetry run black --diff --check --config pyproject.toml $(CODE)
+	poetry run darglint --verbosity 2 $(CODE)
 
-.PHONY: mypy
-mypy:
-	poetry run mypy --config-file pyproject.toml -p app
+.PHONY: linting
+linting:
+	poetry run pylint --rcfile=.pylintrc $(CODE)
+	poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases $(CODE)
 
 .PHONY: check-safety
 check-safety:
-	poetry check
+	poetry check 
 	poetry run safety check --full-report
-	poetry run bandit -ll --recursive app tests
+	poetry run bandit -s B101 --recursive $(CODE)
 
 .PHONY: lint
-lint: test check-codestyle mypy check-safety
+lint: check-codestyle linting check-safety
 
 #* Docker
 # Example: make docker VERSION=latest

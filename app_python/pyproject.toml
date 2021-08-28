@@ -10,8 +10,8 @@ description = "Simple python web application that shows current time in Moscow"
 readme = "README.md"
 authors = ["app_python <a1d4r@yandex.ru>"]
 license = "MIT"
-repository = "https://github.com/a1d4r/app_python"
-homepage = "https://github.com/a1d4r/app_python"
+repository = "https://github.com/a1d4r/devops"
+homepage = "https://github.com/a1d4r/devops"
 
 # Keywords description https://python-poetry.org/docs/pyproject/#keywords
 keywords = []  #! Update me
@@ -34,6 +34,7 @@ python = "^3.9"
 fastapi = "^0.68.0"
 uvicorn = {extras = ["standart"], version = "^0.15.0"}
 pytz = "^2021.1"
+pylint = "^2.10.2"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.0"

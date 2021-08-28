@@ -9,6 +9,9 @@ jobs:
     defaults:
       run:
         working-directory: ./app_python
+    env:
+      CODE: app tests
+      TESTS: tests
 
     steps:
     - uses: actions/checkout@v2
@@ -25,3 +28,20 @@ jobs:
     - name: Display installed packages
       run:
         poetry show
+    - name: Check codestyle
+      run:
+        isort --diff --check-only --settings-path pyproject.toml $(CODE)
+        black --diff --check --config pyproject.toml $(CODE)
+        darglint --verbosity 2 $(CODE)
+    - name: Run linters
+      run:
+        pylint --rcfile=.pylintrc $(CODE)
+        mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases $(CODE)
+    - name: Check safety
+      run:
+        poetry check 
+        safety check --full-report
+        bandit -s B101 --recursive $(CODE)
+    - name: Run tests
+      run:
+        python -m pytest --cov=app $(TESTS)
