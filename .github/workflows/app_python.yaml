@@ -43,8 +43,8 @@ jobs:
       id: cached-poetry-dependencies
       uses: actions/cache@v2
       with:
-        path: .venv
-        key: poetry_venv_v3-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+        path: ${{ env.APP_PATH }}/.venv
+        key: poetry_venv_v5-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
     - name: Install dependencies
       run: |
         poetry install --no-interaction --no-root
