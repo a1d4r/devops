@@ -20,28 +20,26 @@ jobs:
       with:
         python-version: 3.9
     - name: Install Poetry
-      run:
-        pip install poetry==1.1.8
+      run: pip install poetry==1.1.8
     - name: Install dependencies
-      run:
-        poetry install --no-root
+      run: poetry install --no-root
     - name: Display installed packages
-      run:
+      run: |
         poetry show
     - name: Check codestyle
-      run:
+      run: |
         poetry run isort --diff --check-only --settings-path pyproject.toml ${{ env.CODE }}
         poetry run black --diff --check --config pyproject.toml ${{ env.CODE }}
         poetry run darglint --verbosity 2 ${{ env.CODE }}
     - name: Run linters
-      run:
+      run: |
         poetry run pylint --rcfile=.pylintrc ${{ env.CODE }}
         poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${{ env.CODE }}
     - name: Check safety
-      run:
+      run: |
         poetry check 
         poetry run safety check --full-report
         poetry run bandit -s B101 --recursive ${{ env.CODE }}
     - name: Run tests
-      run:
+      run: |
         python -m pytest --cov=app ${{ env.TESTS }}
