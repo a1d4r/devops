@@ -52,9 +52,3 @@ jobs:
     - name: Run tests
       run: |
         poetry run python -m pytest --cov=app ${{ env.TESTS }}
-  build:
-    needs: lint_test
-    runs-on: ubuntu-latest
-
-    steps:
-    - 
