@@ -24,7 +24,7 @@ jobs:
       with:
         python-version: 3.9
     - name: Install Poetry
-      uses: snok/install-poetry@v1
+      uses: snok/install-poetry@v1.1.8
       with:
         version: 1.1.8
         virtualenvs-create: true
@@ -40,23 +40,25 @@ jobs:
         poetry install --no-interaction --no-root
         poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${{ env.CODE }}
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+    - name: Activate environment
+      run: source .venv/bin/activate
     - name: Check codestyle
       run: |
-        poetry run isort --diff --check-only --settings-path pyproject.toml ${{ env.CODE }}
-        poetry run black --diff --check --config pyproject.toml ${{ env.CODE }}
-        poetry run darglint --verbosity 2 ${{ env.CODE }}
+        isort --diff --check-only --settings-path pyproject.toml ${{ env.CODE }}
+        black --diff --check --config pyproject.toml ${{ env.CODE }}
+        darglint --verbosity 2 ${{ env.CODE }}
     - name: Run linters
       run: |
-        poetry run pylint --rcfile=.pylintrc ${{ env.CODE }}
-        poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${{ env.CODE }}
+        pylint --rcfile=.pylintrc ${{ env.CODE }}
+        mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${{ env.CODE }}
     - name: Check safety
       run: |
         poetry check 
-        poetry run safety check --full-report
-        poetry run bandit -s B101 --recursive ${{ env.CODE }}
+        safety check --full-report
+        bandit -s B101 --recursive ${{ env.CODE }}
     - name: Run tests
       run: |
-        poetry run python -m pytest --cov=app ${{ env.TESTS }}
+        python -m pytest --cov=app ${{ env.TESTS }}
   
   build:  # Build docker image and push it to Dockerhub
     needs: lint_test
