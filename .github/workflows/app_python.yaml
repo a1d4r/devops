@@ -6,7 +6,7 @@ env:
   APP_PATH: ./app_python  # source root
   CODE: app tests  # packages with source code (inside source root)
   TESTS: tests  # package with tests (inside source root)
-  IMAGE_NAME: devops-python-app  # name for docker image
+  IMAGE_NAME: devops-python-app  # name for Docker image
 
 jobs:
 
