@@ -30,18 +30,18 @@ jobs:
         poetry show
     - name: Check codestyle
       run:
-        poetry run isort --diff --check-only --settings-path pyproject.toml $(CODE)
-        poetry run black --diff --check --config pyproject.toml $(CODE)
-        poetry run darglint --verbosity 2 $(CODE)
+        poetry run isort --diff --check-only --settings-path pyproject.toml ${{ env.CODE }}
+        poetry run black --diff --check --config pyproject.toml ${{ env.CODE }}
+        poetry run darglint --verbosity 2 ${{ env.CODE }}
     - name: Run linters
       run:
-        poetry run pylint --rcfile=.pylintrc $(CODE)
-        poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases $(CODE)
+        poetry run pylint --rcfile=.pylintrc ${{ env.CODE }}
+        poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${{ env.CODE }}
     - name: Check safety
       run:
         poetry check 
         poetry run safety check --full-report
-        poetry run bandit -s B101 --recursive $(CODE)
+        poetry run bandit -s B101 --recursive ${{ env.CODE }}
     - name: Run tests
       run:
-        python -m pytest --cov=app $(TESTS)
+        python -m pytest --cov=app ${{ env.TESTS }}
