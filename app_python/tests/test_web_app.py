@@ -9,9 +9,9 @@ from app.main import app
 client = TestClient(app)
 
 
-@freeze_time
+@freeze_time()
 def test_current_time():
     response = client.get('/')
     assert response.status_code == 200
     current_time = datetime.now(ZoneInfo('Europe/Moscow')).time()
-    assert datetime.strptime(response.text, '%H:%M:%S').time() == current_time
+    assert current_time.strftime('%H:%M:%S') in response.text

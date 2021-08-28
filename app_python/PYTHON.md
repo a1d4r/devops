@@ -21,3 +21,10 @@ cookiecutter template ([`python-package-template`](https://github.com/TezRomacH/
 - [Dockerfile](https://github.com/a1d4r/devops/blob/master/docker/Dockerfile) for your package.
 - Always up-to-date dependencies with [`@dependabot`](https://dependabot.com/). You will only [enable it](https://docs.github.com/en/github/administering-a-repository/enabling-and-disabling-version-updates#enabling-github-dependabot-version-updates).
 - Automatic drafts of new releases with [`Release Drafter`](https://github.com/marketplace/actions/release-drafter). You may see the list of labels in [`release-drafter.yml`](https://github.com/a1d4r/devops/blob/master/.github/release-drafter.yml). Works perfectly with [Semantic Versions](https://semver.org/) specification.
+
+## Tests
+- Widely used `pytest` framework for testing
+- Use testing web client (`fastapi.testclient.TestClient`)
+- Use `freezegun` python package which provides `freeze_time` decorator so that the time is always the same during the test execution.
+- Use `pytest-cov` for tracking test coverage
+- Keep coverage as high as possible (currently it's 100%)

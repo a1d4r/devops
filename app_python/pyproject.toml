@@ -50,6 +50,7 @@ pyupgrade = "^2.23.1"
 safety = "^1.10.3"
 freezegun = "^1.1.0"
 pytest-freezegun = "^0.4.2"
+pytest-cov = "^2.12.1"
 
 [tool.black]
 # https://github.com/psf/black
