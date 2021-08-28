@@ -12,6 +12,9 @@ jobs:
 
   lint_test:  # Run linters and test application
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.APP_PATH }}
 
     env:
       POETRY_VERSION: 1.1.8
@@ -35,38 +38,33 @@ jobs:
         version: ${{ env.POETRY_VERSION }}
         virtualenvs-create: true
         virtualenvs-in-project: true
-        virtualenvs-path: 
       if: steps.cached-poetry.outputs.cache-hit != 'true'
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v2
       with:
         path: .venv
-        key: poetry_venv_v4-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+        key: poetry_venv_v3-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
     - name: Install dependencies
       run: |
         poetry install --no-interaction --no-root
         poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${{ env.CODE }}
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
     - name: Check codestyle
-      working-directory: ${{ env.APP_PATH }}
       run: |
         poetry run isort --diff --check-only --settings-path pyproject.toml ${{ env.CODE }}
         poetry run black --diff --check --config pyproject.toml ${{ env.CODE }}
         poetry run darglint --verbosity 2 ${{ env.CODE }}
     - name: Run linters
-      working-directory: ${{ env.APP_PATH }}
       run: |
         poetry run pylint --rcfile=.pylintrc ${{ env.CODE }}
         poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${{ env.CODE }}
     - name: Check safety
-      working-directory: ${{ env.APP_PATH }}
       run: |
         poetry check 
         poetry run safety check --full-report
         poetry run bandit -s B101 --recursive ${{ env.CODE }}
     - name: Run tests
-      working-directory: ${{ env.APP_PATH }}
       run: |
         poetry run python -m pytest --cov=app ${{ env.TESTS }}
   
