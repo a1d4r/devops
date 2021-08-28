@@ -36,7 +36,7 @@ jobs:
         key: poetry_v7-${{ env.POETRY_VERSION }}
 
     - name: Install Poetry
-      uses: snok/install-poetry@v1.1.8
+      uses: snok/install-poetry@7deceebea5fbb7d61f3e1515dee1903b9228deca
       with:
         version: ${{ env.POETRY_VERSION }}
         virtualenvs-create: true
@@ -81,10 +81,6 @@ jobs:
     needs: lint_test
     runs-on: ubuntu-latest
     if: success() && github.ref == 'refs/heads/master'
-
-    defaults:
-      run:
-        working-directory: ./app_python
 
     steps:
     - name: Checkout Github repository
