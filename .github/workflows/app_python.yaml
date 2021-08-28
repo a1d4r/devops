@@ -16,6 +16,9 @@ jobs:
       run:
         working-directory: ${{ env.APP_PATH }}
 
+    env:
+      POETRY_VERSION: 1.1.8
+
     steps:
     - name: Checkout Github repository
       uses: actions/checkout@v2
@@ -23,12 +26,18 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
+    - name: Load cached Poetry installation
+      uses: actions/cache@v2
+      with:
+        path: ~/.local
+        key: poetry-${{ env.POETRY_VERSION }}
     - name: Install Poetry
       uses: snok/install-poetry@v1
       with:
-        version: 1.1.8
+        version: ${{ env.POETRY_VERSION }}
         virtualenvs-create: true
         virtualenvs-in-project: true
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
     - name: Load cached venv
       id: cached-poetry-dependencies
       uses: actions/cache@v2
