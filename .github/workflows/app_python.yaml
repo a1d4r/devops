@@ -44,4 +44,4 @@ jobs:
         poetry run bandit -s B101 --recursive ${{ env.CODE }}
     - name: Run tests
       run: |
-        python -m pytest --cov=app ${{ env.TESTS }}
+        poetry run python -m pytest --cov=app ${{ env.TESTS }}
