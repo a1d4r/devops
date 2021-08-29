@@ -8,7 +8,7 @@ pipeline {
         IMAGE_NAME = 'devops-python-app'
         DOCKER_HUB = credentials('docker-hub')
     }
-
+    agent any
     // agent { 
     //     docker { 
     //         image 'python:3.9-slim-buster'
