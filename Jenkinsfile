@@ -22,7 +22,7 @@ pipeline {
                     cd $APP_PATH
                     find . -mindepth 1 -maxdepth 1 -exec mv -t .. -- {} +
                 '''
-                sh 'pip install poetry'
+                sh 'python -m pip install poetry'
                 sh 'poetry install --no-interaction --no-root'
                 sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
             }
