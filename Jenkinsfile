@@ -7,14 +7,16 @@ pipeline {
         TESTS = 'tests'
     }
 
-    agent { docker { image 'python:3.9-slim-buster' } }
+    agent { 
+        docker { 
+            image 'python:3.9-slim-buster'
+            args '-u root'
+        } 
+    }
 
     stages {
         stage('deps') {
             steps {
-                sh 'curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python'
-                sh 'PATH = $HOME/.poetry/bin:$PATH'
-                sh 'cd ${APP_PATH}'
                 sh 'python -m pip install poetry'
                 sh 'poetry install --no-interaction --no-root'
                 sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${{ env.CODE }}'
