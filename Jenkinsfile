@@ -63,8 +63,8 @@ pipeline {
             steps {
                 dir("${APP_PATH}") {
                     script {
-                        def image = docker.build("${DOCKER_HUB_USERNAME}/${IMAGE_NAME}:latest", "-f ./docker/Dockerfile .")
-                        docker.withRegistry("", "${DOCKER_HUB_ACCESS_TOKEN}") {
+                        def image = docker.build('$DOCKER_HUB_USERNAME/$IMAGE_NAME:latest', '-f ./docker/Dockerfile .')
+                        docker.withRegistry('', '$DOCKER_HUB_ACCESS_TOKEN') {
                             image.push()
                         }
                     }
