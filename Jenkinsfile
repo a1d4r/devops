@@ -18,36 +18,40 @@ pipeline {
     stages {
         stage('deps') {
             steps {
-                sh '''
-                    cd $APP_PATH
-                    find . -mindepth 1 -maxdepth 1 -exec mv -t .. -- {} +
-                '''
-                sh 'python -m pip install poetry'
-                sh 'poetry install --no-interaction --no-root'
-                sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
+                dir('$APP_PATH') {
+                    sh '''
+                        cd $APP_PATH
+                        find . -mindepth 1 -maxdepth 1 -exec mv -t .. -- {} +
+                    '''
+                    sh 'python -m pip install poetry'
+                    sh 'poetry install --no-interaction --no-root'
+                    sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
+                }
             }
         }
         stage('lint-test') {
             steps {
-                parallel (
-                    'codestyle': {
-                        sh 'poetry run isort --diff --check-only --settings-path pyproject.toml ${CODE}'
-                        sh 'poetry run black --diff --check --config pyproject.toml ${CODE}'
-                        sh 'poetry run darglint --verbosity 2 ${CODE}'
-                    },
-                    'lint': {
-                        sh 'poetry run pylint --rcfile=.pylintrc ${CODE}'
-                        sh 'poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${CODE}'
-                    }, 
-                    'safety': {
-                        sh 'poetry check'
-                        sh 'poetry run safety check --full-report'
-                        sh 'poetry run bandit -s B101 --recursive ${CODE}'
-                    },
-                    'test': {
-                        sh 'poetry run python -m pytest --cov=app ${CODE}'
-                    }
-                )
+                dir('$APP_PATH') {
+                    parallel (
+                        'codestyle': {
+                            sh 'poetry run isort --diff --check-only --settings-path pyproject.toml ${CODE}'
+                            sh 'poetry run black --diff --check --config pyproject.toml ${CODE}'
+                            sh 'poetry run darglint --verbosity 2 ${CODE}'
+                        },
+                        'lint': {
+                            sh 'poetry run pylint --rcfile=.pylintrc ${CODE}'
+                            sh 'poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${CODE}'
+                        }, 
+                        'safety': {
+                            sh 'poetry check'
+                            sh 'poetry run safety check --full-report'
+                            sh 'poetry run bandit -s B101 --recursive ${CODE}'
+                        },
+                        'test': {
+                            sh 'poetry run python -m pytest --cov=app ${CODE}'
+                        }
+                    )
+                }
             }
         }
         stage('build') {
@@ -56,10 +60,12 @@ pipeline {
             }
             agent none
             steps {
-                script {
-                    def image = docker.build('${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:latest')
-                    docker.withRegistry('', '${env.DOCKER_HUB_PSW}') {
-                        image.push()
+                dir('$APP_PATH') {
+                    script {
+                        def image = docker.build('${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:latest', '-f ./docker/Dockerfile .')
+                        docker.withRegistry('', '${env.DOCKER_HUB_PSW}') {
+                            image.push()
+                        }
                     }
                 }
             }
