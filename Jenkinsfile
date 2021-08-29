@@ -6,6 +6,7 @@ pipeline {
         CODE = 'app tests'
         TESTS = 'tests'
         IMAGE_NAME = 'devops-python-app'
+        DOCKER_HUB = credentials('docker-hub')
     }
 
     agent { 
@@ -58,9 +59,6 @@ pipeline {
             }
         }
         stage('build') {
-            environment {
-                DOCKER_HUB = credentials('docker-hub')
-            }
             agent none
             steps {
                 dir('$APP_PATH') {
