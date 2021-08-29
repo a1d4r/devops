@@ -24,7 +24,7 @@ pipeline {
                         sh 'poetry run isort --diff --check-only --settings-path pyproject.toml ${CODE}'
                         sh 'poetry run black --diff --check --config pyproject.toml ${CODE}'
                         sh 'poetry run darglint --verbosity 2 ${CODE}'
-                    }
+                    },
                     'lint': {
                         sh 'poetry run pylint --rcfile=.pylintrc ${CODE}'
                         sh 'poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${CODE}'
@@ -33,7 +33,7 @@ pipeline {
                         sh 'poetry check'
                         sh 'poetry run safety check --full-report'
                         sh 'poetry run bandit -s B101 --recursive ${CODE}'
-                    }
+                    },
                     'test': {
                         sh 'poetry run python -m pytest --cov=app ${CODE}'
                     }
