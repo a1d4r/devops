@@ -66,8 +66,8 @@ pipeline {
                 sh "echo ${APP_PATH}"
                 dir('${APP_PATH}') {
                     script {
-                        def image = docker.build('${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:latest', '-f ./docker/Dockerfile .')
-                        docker.withRegistry('', '${env.DOCKER_HUB_PSW}') {
+                        def image = docker.build('${DOCKER_HUB_USR}/${IMAGE_NAME}:latest', '-f ./docker/Dockerfile .')
+                        docker.withRegistry('', '${DOCKER_HUB_PSW}') {
                             image.push()
                         }
                     }
