@@ -11,7 +11,7 @@ pipeline {
     agent { 
         docker { 
             image 'python:3.9-slim-buster'
-            args '-u root -v $HOME/.local:/usr/local/bin/ -v $HOME/.cache:/root/.cache'
+            args '-u root -v $HOME/.cache:/root/.cache'
         } 
     }
 
