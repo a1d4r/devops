@@ -12,6 +12,9 @@ pipeline {
     stages {
         stage('deps') {
             steps {
+                sh 'apt-get update && apt-get install -y curl'
+                sh 'curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python'
+                sh 'PATH = $HOME/.poetry/bin:$PATH'
                 sh 'cd ${APP_PATH}'
                 sh 'python -m pip install poetry'
                 sh 'poetry install --no-interaction --no-root'
