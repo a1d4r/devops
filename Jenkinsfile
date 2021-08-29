@@ -51,10 +51,16 @@ pipeline {
             }
         }
         stage('build') {
+            environment {
+                DOCKER_HUB = credentials('docker-hub')
+            }
+            agent none
             steps {
                 script {
-                    def image = docker.build("${env.IMAGE_NAME}:latest")
-                    image.push()
+                    def image = docker.build('${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:latest')
+                    docker.withRegistry('', '${env.DOCKER_HUB_PSW}') {
+                        image.push()
+                    }
                 }
             }
         }
