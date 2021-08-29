@@ -59,8 +59,16 @@ pipeline {
                 
             }
         }
-        stage('build') {
-            agent none
+        stage('build') {            
+            // agent none
+            environment {
+                POETRY_VERSION = '1.1.8'
+                APP_PATH = './app_python'
+                CODE = 'app tests'
+                TESTS = 'tests'
+                IMAGE_NAME = 'devops-python-app'
+                DOCKER_HUB = credentials('docker-hub')
+            }
             steps {
                 sh "echo $APP_PATH"
                 sh "echo ${APP_PATH}"
