@@ -62,7 +62,7 @@ pipeline {
         stage('build') {            
             agent {
                 docker {
-                    image: 'docker:dind'
+                    image 'docker:dind'
                 }
             }
             environment {
