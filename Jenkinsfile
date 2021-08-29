@@ -60,7 +60,9 @@ pipeline {
             }
         }
         stage('build') {            
-            // agent none
+            agent {
+                image: 'docker:dind'
+            }
             environment {
                 POETRY_VERSION = '1.1.8'
                 APP_PATH = './app_python'
