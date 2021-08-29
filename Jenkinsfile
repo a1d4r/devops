@@ -16,7 +16,7 @@ pipeline {
     //     } 
     // }
 
-    // stages {
+    stages {
     //     stage('deps') {
     //         steps {
     //             dir('${APP_PATH}') {
