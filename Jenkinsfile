@@ -11,7 +11,7 @@ pipeline {
     agent { 
         docker { 
             image 'python:3.9-slim-buster'
-            args '-u root'
+            args '-u root -v $HOME/.local:/usr/local/bin/ -v -v $HOME/.cache:/root/.cache'
         } 
     }
 
@@ -22,7 +22,7 @@ pipeline {
                     cd $APP_PATH
                     find . -mindepth 1 -maxdepth 1 -exec mv -t .. -- {} +
                 '''
-                sh 'python -m pip install poetry'
+                sh 'pip install poetry'
                 sh 'poetry install --no-interaction --no-root'
                 sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
             }
