@@ -61,6 +61,8 @@ pipeline {
         stage('build') {
             steps {
                 dir('${APP_PATH}') {
+                    sh "echo ${APP_PATH}"
+                    sh "echo $(pwd)"
                     script {
                         def image = docker.build('${DOCKER_HUB_USR}/${IMAGE_NAME}:latest', '-f ./docker/Dockerfile .')
                         docker.withRegistry('', '${DOCKER_HUB_PSW}') {
