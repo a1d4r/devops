@@ -5,6 +5,7 @@ pipeline {
         APP_PATH = './app_python'
         CODE = 'app tests'
         TESTS = 'tests'
+        IMAGE_NAME = 'devops-python-app'
     }
 
     agent { 
@@ -47,6 +48,14 @@ pipeline {
                         sh 'poetry run python -m pytest --cov=app ${CODE}'
                     }
                 )
+            }
+        }
+        stage('build') {
+            steps {
+                script {
+                    def image = docker.build("${env.IMAGE_NAME}:latest")
+                    image.push()
+                }
             }
         }
     }
