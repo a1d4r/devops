@@ -61,7 +61,9 @@ pipeline {
         }
         stage('build') {            
             agent {
-                image: 'docker:dind'
+                docker {
+                    image: 'docker:dind'
+                }
             }
             environment {
                 POETRY_VERSION = '1.1.8'
