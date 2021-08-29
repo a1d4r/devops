@@ -20,6 +20,7 @@ pipeline {
         stage('deps') {
             steps {
                 dir('${APP_PATH}') {
+                    sh 'echo $(pwd)'
                     sh 'python -m pip install poetry'
                     sh 'poetry install --no-interaction --no-root '
                     sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
@@ -61,6 +62,8 @@ pipeline {
         stage('build') {
             agent none
             steps {
+                sh "echo $APP_PATH"
+                sh "echo ${APP_PATH}"
                 dir('${APP_PATH}') {
                     script {
                         def image = docker.build('${env.DOCKER_HUB_USR}/${env.IMAGE_NAME}:latest', '-f ./docker/Dockerfile .')
