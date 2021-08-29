@@ -18,8 +18,8 @@ pipeline {
         stage('deps') {
             steps {
                 sh '''
-                    shopt -s dotglob 
-                    mv $APP_PATH/* .
+                    cd $APP_PATH
+                    find . -mindepth 1 -maxdepth 1 -exec mv -t .. -- {} +
                 '''
                 sh 'python -m pip install poetry'
                 sh 'poetry install --no-interaction --no-root'
