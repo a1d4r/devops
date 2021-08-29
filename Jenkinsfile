@@ -60,7 +60,7 @@ pipeline {
     //     }
         stage('build') {
             steps {
-                dir('${APP_PATH}') {
+                dir('${env.APP_PATH}') {
                     sh 'echo ${APP_PATH}'
                     sh 'echo $(pwd)'
                     script {
