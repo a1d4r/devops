@@ -20,7 +20,6 @@ pipeline {
         stage('deps') {
             steps {
                 dir('${APP_PATH}') {
-                    sh 'echo $(pwd)'
                     sh 'python -m pip install poetry'
                     sh 'poetry install --no-interaction --no-root '
                     sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
@@ -62,20 +61,10 @@ pipeline {
         stage('build') {            
             agent {
                 docker {
-                    image 'docker:dind'
+                    image 'docker'
                 }
             }
-            environment {
-                POETRY_VERSION = '1.1.8'
-                APP_PATH = './app_python'
-                CODE = 'app tests'
-                TESTS = 'tests'
-                IMAGE_NAME = 'devops-python-app'
-                DOCKER_HUB = credentials('docker-hub')
-            }
             steps {
-                sh "echo $APP_PATH"
-                sh "echo ${APP_PATH}"
                 dir('${APP_PATH}') {
                     script {
                         def image = docker.build('${DOCKER_HUB_USR}/${IMAGE_NAME}:latest', '-f ./docker/Dockerfile .')
