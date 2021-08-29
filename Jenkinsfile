@@ -2,7 +2,7 @@ pipeline {
 
     environment {
         POETRY_VERSION = '1.1.8'
-        APP_PATH = './app_python'
+        APP_PATH = 'app_python'
         CODE = 'app tests'
         TESTS = 'tests'
         IMAGE_NAME = 'devops-python-app'
@@ -60,7 +60,7 @@ pipeline {
     //     }
         stage('build') {
             steps {
-                dir('%APP_PATH%') {
+                dir("${APP_PATH}") {
                     sh 'echo ${APP_PATH}'
                     sh 'echo $(pwd)'
                     script {
