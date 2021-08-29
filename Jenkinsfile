@@ -20,7 +20,7 @@ pipeline {
                 sh 'mv $APP_PATH/* .'
                 sh 'python -m pip install poetry'
                 sh 'poetry install --no-interaction --no-root'
-                sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${{ env.CODE }}'
+                sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
             }
         }
         stage('lint-test') {
