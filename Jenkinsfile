@@ -1,6 +1,7 @@
 pipeline {
 
     environment {
+        POETRY_VERSION = '1.1.8'
         APP_PATH = './app_python'
         CODE = 'app tests'
         TESTS = 'tests'
@@ -12,7 +13,7 @@ pipeline {
         stage('deps') {
             steps {
                 sh 'cd ${APP_PATH}'
-                sh 'curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -'
+                sh 'pip install poetry==${POETRY_VERSION}'
                 sh 'poetry install --no-interaction --no-root'
                 sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${{ env.CODE }}'
             }
