@@ -11,13 +11,14 @@ pipeline {
     agent { 
         docker { 
             image 'python:3.9-slim-buster'
-            args '-u root -v $HOME/.cache:/root/.cache'
+            args '-u root -v $HOME/.cache:/root/.cache -v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
     stages {
         stage('deps') {
             steps {
                 dir("${APP_PATH}") {
+                    sh 'apt-get update && apt-get install -y docker.io'
                     sh 'python -m pip install poetry'
                     sh 'poetry install --no-interaction --no-root '
                     sh 'poetry run mypy --install-types --namespace-packages --explicit-package-bases --non-interactive ${CODE}'
@@ -57,12 +58,6 @@ pipeline {
             }
         }
         stage('build') {
-            agent { 
-                docker { 
-                    image 'docker'
-                    args '-v /var/run/docker.sock:/var/run/docker.sock'
-                }
-            }
             steps {
                 dir("${APP_PATH}") {
                     script {
