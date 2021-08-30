@@ -11,7 +11,7 @@ pipeline {
     agent { 
         docker { 
             image 'python:3.9-slim-buster'
-            args '-u root -v $HOME/.cache:/root/.cache -v /var/run/docker.sock:/var/run/docker.sock'
+            args '-u root -v $HOME/.cache:/root/.cache'
         }
     }
     stages {
@@ -57,6 +57,12 @@ pipeline {
             }
         }
         stage('build') {
+            agent { 
+                docker { 
+                    image 'docker'
+                    args '-v /var/run/docker.sock:/var/run/docker.sock'
+                }
+            }
             steps {
                 dir("${APP_PATH}") {
                     script {
