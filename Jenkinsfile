@@ -58,7 +58,9 @@ pipeline {
             }
         }
         stage('build') {
-            agent any
+            agent {
+                label 'linux'
+            }
             steps {
                 dir("${APP_PATH}") {
                     script {
