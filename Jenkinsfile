@@ -8,16 +8,14 @@ pipeline {
         IMAGE_NAME = 'devops-python-app'
         DOCKER_HUB_USERNAME = 'a1d4r'
     }
-    agent { label 'master' }
+    agent { 
+        docker { 
+            image 'python:3.9-slim-buster'
+            args '-u root -v $HOME/.cache:/root/.cache'
+        }
+    }
     stages {
         stage('deps') {
-            agent { 
-                docker { 
-                    image 'python:3.9-slim-buster'
-                    args '-u root -v $HOME/.cache:/root/.cache'
-                }
-                label 'python'
-            }
             steps {
                 dir("${APP_PATH}") {
                     sh 'python -m pip install poetry'
@@ -27,7 +25,6 @@ pipeline {
             }
         }
         stage('lint-test') {
-            agent { label 'python' }
             steps {
                 parallel (
                     'codestyle': {
@@ -60,7 +57,6 @@ pipeline {
             }
         }
         stage('build') {
-            agent { label 'master' }
             steps {
                 dir("${APP_PATH}") {
                     script {
