@@ -7,7 +7,6 @@ pipeline {
         TESTS = 'tests'
         IMAGE_NAME = 'devops-python-app'
         DOCKER_HUB_USERNAME = 'a1d4r'
-        DOCKER_HUB_ACCESS_TOKEN = credentials('docker-hub-access-token')
     }
     agent any
     // agent { 
@@ -64,7 +63,7 @@ pipeline {
                 dir("${APP_PATH}") {
                     script {
                         def image = docker.build('$DOCKER_HUB_USERNAME/$IMAGE_NAME:latest', '-f ./docker/Dockerfile .')
-                        docker.withRegistry('', 'docker-hub-access-token') {
+                        docker.withRegistry('', 'docker-hub-credentials') {
                             image.push()
                         }
                     }
