@@ -70,4 +70,7 @@ pipeline {
             }
         }
     }
+    post {
+        cleanup { cleanWs() }
+    }
 }
