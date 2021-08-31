@@ -11,9 +11,9 @@
 
 ## Jenkins
 - Use declarative pipeline
-- Use env vars instead of hardcoding
-- Use docker agent
-- Cleanup workspace
 - Three stages: install dependencies, lint&test, build&push
+- Use env vars instead of hardcoding
+- Use dockerfile agent which builds an image with python and docker inside. (it will be build only once)
+- Cleanup workspace after all stages.
 - Linting and testing runs in parallel
 - Cache python dependencies
