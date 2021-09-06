@@ -1,6 +1,6 @@
-### Install roles
+### Install roles from Ansible Galaxy
 ```
-ansible-galaxy role install geerlingguy.docker
+ansible-galaxy role install geerlingguy.docker geerlingguy.pip weareinteractive.apt
 ```
 
 ### Run playbooks
