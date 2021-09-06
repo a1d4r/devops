@@ -11,6 +11,6 @@ provider "vagrant" {
   # no config
 }
 
-resource "vagrant_vm" "my_vagrant_vm" {
+resource "vagrant_vm" "web_vagrant" {
   vagrantfile_dir = "vagrant"
 }
