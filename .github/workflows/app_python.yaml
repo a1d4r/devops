@@ -33,7 +33,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ~/.local
-        key: poetry_v7-${{ env.POETRY_VERSION }}
+        key: poetry_v8-${{ env.POETRY_VERSION }}
 
     - name: Install Poetry
       uses: snok/install-poetry@7deceebea5fbb7d61f3e1515dee1903b9228deca
@@ -48,7 +48,7 @@ jobs:
       uses: actions/cache@v2
       with:
         path: ${{ env.APP_PATH }}/.venv
-        key: poetry_venv_v7-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
+        key: poetry_venv_v8-${{ runner.os }}-${{ hashFiles('**/poetry.lock') }}
 
     - name: Install dependencies
       run: |
