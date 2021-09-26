@@ -51,8 +51,16 @@ spec:
             httpGet:
               path: /
               port: http
+          volumeMounts:
+            - name: {{ .Values.config.volumeName }}
+              mountPath: {{ .Values.config.mountPath }}
+              subPath: config.json
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: {{ .Values.config.volumeName }}
+          configMap:
+            name: {{ .Values.config.configMapName }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
