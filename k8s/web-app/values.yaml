@@ -40,6 +40,9 @@ service:
   type: LoadBalancer
   port: 8000
 
+secrets:
+  annotations: {}
+
 ingress:
   enabled: false
   className: ""
