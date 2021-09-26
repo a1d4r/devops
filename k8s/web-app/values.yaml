@@ -40,8 +40,15 @@ service:
   type: LoadBalancer
   port: 8000
 
-secrets:
-  annotations: {}
+secret:
+  name: credentials
+
+config:
+  volumeName: config-volume
+  configMapName: config
+  path: config.json
+  mountPath: /config.json
+  subPath: config.json
 
 ingress:
   enabled: false
