@@ -65,7 +65,7 @@ jobs:
     - name: Run linters
       run: |
         poetry run pylint --rcfile=.pylintrc ${{ env.CODE }}
-        poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${{ env.CODE }}
+        poetry run mypy --config-file setup.cfg --namespace-packages --explicit-package-bases ${{ env.CODE }}
 
     - name: Check safety
       run: |

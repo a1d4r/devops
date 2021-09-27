@@ -36,7 +36,7 @@ pipeline {
                     'lint': {
                         dir("${APP_PATH}") {
                             sh 'poetry run pylint --rcfile=.pylintrc ${CODE}'
-                            sh 'poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases ${CODE}'
+                            sh 'poetry run mypy --config-file setup.cfg --namespace-packages --explicit-package-bases ${CODE}'
                         }
                     }, 
                     'safety': {
