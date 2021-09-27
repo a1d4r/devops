@@ -36,6 +36,7 @@ uvicorn = {extras = ["standart"], version = "^0.15.0"}
 pytz = "^2021.1"
 pylint = "^2.10.2"
 prometheus-fastapi-instrumentator = "^5.7.1"
+time-machine = "^2.4.0"
 
 [tool.poetry.dev-dependencies]
 bandit = "^1.7.0"
@@ -50,8 +51,6 @@ pylint = "^2.9.6"
 pytest = "^6.2.4"
 pyupgrade = "^2.23.1"
 safety = "^1.10.3"
-freezegun = "^1.1.0"
-pytest-freezegun = "^0.4.2"
 pytest-cov = "^2.12.1"
 
 [tool.black]
@@ -89,29 +88,3 @@ profile = "black"
 multi_line_output = 3
 indent = 4
 color_output = true
-
-[tool.mypy]
-# mypy configurations: https://mypy.readthedocs.io/en/latest/config_file.html#using-a-pyproject-toml-file
-python_version = 3.9
-pretty = true
-show_traceback = true
-color_output = true
-
-allow_redefinition = false
-check_untyped_defs = true
-disallow_any_generics = true
-disallow_incomplete_defs = true
-ignore_missing_imports = true
-implicit_reexport = false
-no_implicit_optional = true
-show_column_numbers = true
-show_error_codes = true
-show_error_context = true
-strict_equality = true
-strict_optional = true
-warn_no_return = true
-warn_redundant_casts = true
-warn_return_any = true
-warn_unreachable = true
-warn_unused_configs = true
-warn_unused_ignores = true

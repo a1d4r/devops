@@ -41,8 +41,8 @@ codestyle:
 	poetry run isort --settings-path pyproject.toml $(CODE)
 	poetry run black --config pyproject.toml $(CODE)
 
-.PHONY: formatting
-formatting: codestyle
+.PHONY: format
+format: codestyle
 
 #* Linting
 .PHONY: test
@@ -58,11 +58,11 @@ check-codestyle:
 .PHONY: linting
 linting:
 	poetry run pylint --rcfile=.pylintrc $(CODE)
-	poetry run mypy --config-file pyproject.toml --namespace-packages --explicit-package-bases $(CODE)
+	poetry run mypy --config-file setup.cfg --namespace-packages --explicit-package-bases $(CODE)
 
 .PHONY: check-safety
 check-safety:
-	poetry check 
+	poetry check
 	poetry run safety check --full-report
 	poetry run bandit -s B101 --recursive $(CODE)
 
