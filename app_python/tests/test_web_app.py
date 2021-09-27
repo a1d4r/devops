@@ -1,17 +1,41 @@
 from datetime import datetime
-from zoneinfo import ZoneInfo
 
+import time_machine
 from fastapi.testclient import TestClient
-from freezegun import freeze_time
 
-from app.main import app
+from app.settings import settings
 
-client = TestClient(app)
+fixed_datetime = datetime(2010, 10, 26, 1, 24, tzinfo=settings.timezone)
 
 
-@freeze_time()
-def test_current_time():
+@time_machine.travel(fixed_datetime)
+def test_current_time(client: TestClient):
+    """Test that app returns current moscow time in specified format."""
     response = client.get('/')
     assert response.status_code == 200
-    current_time = datetime.now(ZoneInfo('Europe/Moscow')).time()
-    assert current_time.strftime('%H:%M:%S') in response.text
+    assert fixed_datetime.strftime(settings.datetime_format) == response.text
+
+
+@time_machine.travel(fixed_datetime)
+def test_visits_initially_empty(client: TestClient):
+    """Test that there is no visits before we access root path."""
+    response = client.get('/visits')
+    assert response.json() == []
+
+
+def test_visits(client: TestClient):
+    """Test that visits are tracked correctly."""
+    timestamps = [
+        datetime(2010, 10, 10, 10, 10, tzinfo=settings.timezone),
+        datetime(2011, 11, 11, 11, 11, tzinfo=settings.timezone),
+        datetime(2012, 12, 12, 12, 12, tzinfo=settings.timezone),
+    ]
+    for timestamp in timestamps:
+        with time_machine.travel(timestamp):
+            response = client.get('/')
+            assert response.status_code == 200
+    response = client.get('/visits')
+    expected = [
+        timestamp.strftime(settings.datetime_format) for timestamp in timestamps
+    ]
+    assert response.json() == expected
