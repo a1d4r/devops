@@ -8,7 +8,9 @@ from app.main import app
 
 @pytest.fixture()
 def db() -> VisitsStorage:
-    return VisitsStorage('test_visits.json')
+    storage = VisitsStorage('test_visits.json')
+    storage.clear()
+    return storage
 
 
 @pytest.fixture()

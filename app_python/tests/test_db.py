@@ -4,13 +4,9 @@ from app.db import VisitsStorage
 from app.settings import settings
 
 
-def test_storage_initially_empty(db: VisitsStorage):
-    """Test that a new storage does not contain any records."""
-    assert db.get_timestamps() == []
-
-
 def test_add_timestamps(db: VisitsStorage):
     """Test that a timestamp can be added to storage."""
+
     timestamp = datetime.now()
     db.add_timestamp(timestamp)
     assert db.get_timestamps() == [timestamp.strftime(settings.datetime_format)]

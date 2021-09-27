@@ -16,13 +16,6 @@ def test_current_time(client: TestClient):
     assert fixed_datetime.strftime(settings.datetime_format) == response.text
 
 
-@time_machine.travel(fixed_datetime)
-def test_visits_initially_empty(client: TestClient):
-    """Test that there is no visits before we access root path."""
-    response = client.get('/visits')
-    assert response.json() == []
-
-
 def test_visits(client: TestClient):
     """Test that visits are tracked correctly."""
     timestamps = [

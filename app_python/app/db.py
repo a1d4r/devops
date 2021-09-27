@@ -9,17 +9,20 @@ class VisitsStorage:
 
     def __init__(self, filename: str) -> None:
         self.filename = filename
-        self.clear()
 
     def clear(self) -> None:
         """Clear the storage."""
         with open(self.filename, 'w') as f:
-            json.dump([], f, default=str)
+            json.dump([], f)
 
     def get_timestamps(self) -> list[str]:
         """Get all timestamps from storage."""
-        with open(self.filename) as f:
-            return json.load(f)  # type: ignore
+        try:
+            with open(self.filename, 'r') as f:
+                return json.load(f)  # type: ignore
+        except FileNotFoundError:
+            self.clear()
+            return []
 
     def add_timestamp(self, timestamp: datetime) -> None:
         """Add timestamp to storage"""
