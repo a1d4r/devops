@@ -1,10 +1,9 @@
 CHART_NAME := web
 CHART_PATH := ./web-app
-SECRETS_PATH := ./secrets.yaml
 
 .PHONY: up
 up:
-	helm secrets install $(CHART_NAME) $(CHART_PATH) -f $(SECRETS_PATH)
+	helm install $(CHART_NAME) $(CHART_PATH)
 
 .PHONY: down
 down:
@@ -12,4 +11,4 @@ down:
 
 .PHONY: debug
 debug:
-	helm secrets install --dry-run $(CHART_NAME) $(CHART_PATH) -f $(SECRETS_PATH)
+	helm install --dry-run $(CHART_NAME) $(CHART_PATH)
