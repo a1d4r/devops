@@ -1,11 +1,13 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "web-app.fullname" . }}
   labels:
     {{- include "web-app.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
+  serviceName: {{ include "web-app.fullname" . }}
+  podManagementPolicy: "Parallel"
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
@@ -34,11 +36,8 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
-            - name: PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: credentials
-                  key: password
+            - name: FILEPATH
+              value: {{ .Values.envs.filepath }}
           ports:
             - name: http
               containerPort: 8000
@@ -51,16 +50,12 @@ spec:
             httpGet:
               path: /
               port: http
-          volumeMounts:
-            - name: {{ .Values.config.volumeName }}
-              mountPath: {{ .Values.config.mountPath }}
-              subPath: config.json
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
-      volumes:
-        - name: {{ .Values.config.volumeName }}
-          configMap:
-            name: {{ .Values.config.configMapName }}
+          volumeMounts:
+            - name: {{ .Values.volumeClaim.name }}
+              mountPath: {{ .Values.volumeClaim.mountPath }}
+
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
@@ -73,3 +68,11 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+  volumeClaimTemplates:
+  - metadata:
+      name: {{ .Values.volumeClaim.name }}
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      resources:
+        requests:
+          storage: {{ .Values.volumeClaim.storage }}
