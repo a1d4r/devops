@@ -1,5 +1,6 @@
 import json
 from datetime import datetime
+from pathlib import Path
 
 from app.settings import settings
 
@@ -7,18 +8,19 @@ from app.settings import settings
 class VisitsStorage:
     """Persistent storage for visits."""
 
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
+    def __init__(self, filepath: Path) -> None:
+        self.filepath = filepath
 
     def clear(self) -> None:
         """Clear the storage."""
-        with open(self.filename, 'w') as f:
+        self.filepath.parent.mkdir(exist_ok=True, parents=True)
+        with self.filepath.open('w') as f:
             json.dump([], f)
 
     def get_timestamps(self) -> list[str]:
         """Get all timestamps from storage."""
         try:
-            with open(self.filename, 'r') as f:
+            with self.filepath.open('r') as f:
                 return json.load(f)  # type: ignore
         except FileNotFoundError:
             self.clear()
@@ -28,8 +30,8 @@ class VisitsStorage:
         """Add timestamp to storage"""
         timestamps = self.get_timestamps()
         timestamps.append(timestamp.strftime(settings.datetime_format))
-        with open(self.filename, 'w') as f:
+        with self.filepath.open('w') as f:
             json.dump(timestamps, f)
 
 
-db = VisitsStorage('visits.json')
+db = VisitsStorage(settings.filepath)

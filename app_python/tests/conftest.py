@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 
@@ -8,7 +10,7 @@ from app.main import app
 
 @pytest.fixture()
 def db() -> VisitsStorage:
-    storage = VisitsStorage('test_visits.json')
+    storage = VisitsStorage(Path('test_visits.json'))
     storage.clear()
     return storage
 
