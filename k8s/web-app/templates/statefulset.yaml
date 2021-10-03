@@ -55,7 +55,22 @@ spec:
           volumeMounts:
             - name: {{ .Values.volumeClaim.name }}
               mountPath: {{ .Values.volumeClaim.mountPath }}
-
+            - name: {{ .Values.initVolume.name }}
+              mountPath: {{ .Values.initVolume.mountPath }}
+      initContainers:
+          - name: install
+            image: busybox
+            command:
+            - wget
+            - "-O"
+            - "/work-dir/index.html"
+            - http://info.cern.ch
+            volumeMounts:
+            - name: {{ .Values.initVolume.name }}
+              mountPath: "/work-dir"
+      volumes:
+        - name: {{ .Values.initVolume.name }}
+          emptyDir: {}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

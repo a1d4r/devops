@@ -48,6 +48,10 @@ volumeClaim:
   storage: 64Mi
   mountPath: /data
 
+initVolume:
+  name: workdir
+  mountPath: /mnt
+
 ingress:
   enabled: false
   className: ""
